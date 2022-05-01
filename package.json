@@ -1,5 +1,5 @@
 {
-  "name": "miare-sdk",
+  "name": "@snapp-store/miare-sdk",
   "version": "1.0.0",
   "description": "A javascript sdk for mia.re api.",
   "main": "dist/index.js",
