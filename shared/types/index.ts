@@ -1,16 +1,10 @@
-export type MiareModes = 'staging' | 'production';
+export type MiareEnvironment = 'staging' | 'production';
 
-export interface LocationPoint {
+export interface MiareLocationPoint {
   latitude: number;
   longitude: number;
 }
-
-export interface EstimatePriceData {
-  price: number;
-  status: string;
-}
-
-export interface AreaData {
+export interface MiareArea {
   id: number;
   max_ongoing_trips: number;
   name: string;
@@ -21,7 +15,7 @@ export interface AreaData {
   };
 }
 
-export type StateType =
+export type MiareTripState =
   | 'assign_queue'
   | 'pickup'
   | 'dropoff'
@@ -29,22 +23,12 @@ export type StateType =
   | 'canceled_by_miare'
   | 'canceled_by_client';
 
-export interface GetTripsRequestBody {
-  area_id?: number;
-  state?: StateType;
-  bill_number?: string;
-  from_datetime?: string;
-  to_datetime?: string;
-  offset?: number;
-  limit?: number;
-}
-
-interface ManifestTtem {
+export interface MiareCourseManifestTtem {
   name: string;
   quantity: number;
 }
 
-interface Courses {
+export interface MiareTripCourses {
   id: string;
   trip_id: string;
   bill_number: string;
@@ -52,33 +36,33 @@ interface Courses {
   address: string;
   dropped_off_at: string | null;
   phone_number: string;
-  location: LocationPoint | null;
-  manifest_items: ManifestTtem[] | null;
+  location: MiareLocationPoint | null;
+  manifest_items: MiareCourseManifestTtem[] | null;
   payment: {
     payment_type: 'cash';
     price: number;
   };
 }
 
-interface Courier {
+export interface MiareTripCourier {
   image: string;
-  location: LocationPoint | null;
+  location: MiareLocationPoint | null;
   location_updated_at: string;
   name: string;
   phone_number: string;
 }
 
-export interface Trip {
+export interface MiareTrip {
   id: string;
   created_at: string;
   assigned_at: string | null;
   picked_up_at: string | null;
-  state: StateType;
+  state: MiareTripState;
   pickup: {
     address: string;
     deadline: string;
     image: string;
-    location: LocationPoint;
+    location: MiareLocationPoint;
     name: string;
     phone_number: string;
   };
@@ -86,36 +70,53 @@ export interface Trip {
     id: string;
     name: string;
   };
-  courier: Courier | null;
-  courses: Courses[];
+  courier: MiareTripCourier | null;
+  courses: MiareTripCourses[];
   tracking_url: string;
 }
 
-export interface GetTripsResponse {
-  data: Trip[];
+export type GetAreasResponse = MiareArea[];
+
+export interface GetEstimatePriceResponse {
+  price: number;
+  status: string;
+}
+
+export interface GetMiareTripsRequestBody {
+  area_id?: number;
+  state?: MiareTripState;
+  bill_number?: string;
+  from_datetime?: string;
+  to_datetime?: string;
+  offset?: number;
+  limit?: number;
+}
+
+export interface GetMiareTripsResponse {
+  data: MiareTrip[];
   next: string | null;
   previous: string | null;
   total_count: number;
 }
 
-export interface CreateTripRequestBody {
+export interface CreateMiareTripRequestBody {
   pickup: {
     address: string;
     deadline: string;
     image: string;
-    location: LocationPoint;
+    location: MiareLocationPoint;
     name: string;
     phone_number: string;
   };
-  courses: Courses[];
+  courses: MiareTripCourses[];
 }
 
-export interface CreateTripResponse extends Trip {
+export interface CreateMiareTripResponse extends MiareTrip {
   state: 'assign_queue';
 }
 
-export interface CancelTripResponse extends Trip {
+export interface CancelMiareTripResponse extends MiareTrip {
   state: 'canceled_by_client';
 }
 
-export interface GetTripResponse extends Trip {}
+export interface GetMiareTripResponse extends MiareTrip {}
