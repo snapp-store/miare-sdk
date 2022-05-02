@@ -29,7 +29,7 @@ export type StateType =
   | 'canceled_by_miare'
   | 'canceled_by_client';
 
-export interface GetTripsRequest {
+export interface GetTripsRequestBody {
   area_id?: number;
   state?: StateType;
   bill_number?: string;
@@ -52,7 +52,7 @@ interface Courses {
   address: string;
   dropped_off_at: string | null;
   phone_number: string;
-  location: LocationPoint;
+  location: LocationPoint | null;
   manifest_items: ManifestTtem[] | null;
   payment: {
     payment_type: 'cash';
@@ -96,4 +96,24 @@ export interface GetTripsResponse {
   next: string | null;
   previous: string | null;
   total_count: number;
+}
+
+export interface CreateTripRequestBody {
+  pickup: {
+    address: string;
+    deadline: string;
+    image: string;
+    location: LocationPoint;
+    name: string;
+    phone_number: string;
+  };
+  courses: Courses[];
+}
+
+export interface CreateTripResponse extends Trip {
+  state: 'assign_queue';
+}
+
+export interface CancelTripResponse extends Trip {
+  state: 'canceled_by_client';
 }

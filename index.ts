@@ -1,8 +1,11 @@
 import axios, { AxiosInstance } from 'axios';
 import {
   AreaData,
+  CancelTripResponse,
+  CreateTripRequestBody,
+  CreateTripResponse,
   EstimatePriceData,
-  GetTripsRequest,
+  GetTripsRequestBody,
   GetTripsResponse,
   LocationPoint,
   MiareModes,
@@ -13,8 +16,31 @@ class Miare {
   private _apiUrlPrefix: string;
 
   constructor(apiKey: string, mode: MiareModes = 'staging') {
-    this._apiUrlPrefix = mode === 'staging' ? 'staging.' : '';
+    this._apiUrlPrefix = mode === 'production' ? '' : 'staging.';
     this._axiosAgent = axios.create({ headers: { Authorization: `Token ${apiKey}` } });
+  }
+
+  async createTrip(createTripParameters: CreateTripRequestBody) {
+    const baseUrl = `https://${this._apiUrlPrefix}ws.mia.re/trip-management/third-party-api/v2/trips`;
+    const res = await this._axiosAgent.post<CreateTripResponse>(baseUrl, createTripParameters);
+
+    return res.data;
+  }
+
+  async cancelTripById(tripId: string) {
+    const baseUrl = `https://${this._apiUrlPrefix}ws.mia.re/trip-management/third-party-api/v2/trips/${tripId}/cancel/`;
+    const res = await this._axiosAgent.post<CancelTripResponse>(baseUrl);
+
+    return res.data;
+  }
+
+  async getTrips(getTripsParameters: GetTripsRequestBody) {
+    const baseUrl = `https://${this._apiUrlPrefix}ws.mia.re/trip-management/third-party-api/v2/trips`;
+    const res = await this._axiosAgent.get<GetTripsResponse>(baseUrl, {
+      params: getTripsParameters,
+    });
+
+    return res.data;
   }
 
   async getEstimatePrice(source: LocationPoint, destination: LocationPoint) {
@@ -32,15 +58,6 @@ class Miare {
   async getAreas() {
     const baseUrl = `https://${this._apiUrlPrefix}ws.mia.re/area/third-party-api/v2/areas`;
     const res = await this._axiosAgent.get<AreaData[]>(baseUrl);
-
-    return res.data;
-  }
-
-  async getTrips(getTripsparameters: GetTripsRequest) {
-    const baseUrl = `https://${this._apiUrlPrefix}ws.mia.re/trip-management/third-party-api/v2/trips`;
-    const res = await this._axiosAgent.get<GetTripsResponse[]>(baseUrl, {
-      params: getTripsparameters,
-    });
 
     return res.data;
   }
