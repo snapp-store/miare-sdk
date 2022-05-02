@@ -5,6 +5,7 @@ import {
   CreateTripRequestBody,
   CreateTripResponse,
   EstimatePriceData,
+  GetTripResponse,
   GetTripsRequestBody,
   GetTripsResponse,
   LocationPoint,
@@ -30,6 +31,13 @@ class Miare {
   async cancelTripById(tripId: string) {
     const baseUrl = `https://${this._apiUrlPrefix}ws.mia.re/trip-management/third-party-api/v2/trips/${tripId}/cancel/`;
     const res = await this._axiosAgent.post<CancelTripResponse>(baseUrl);
+
+    return res.data;
+  }
+
+  async getTripById(tripId: string) {
+    const baseUrl = `https://${this._apiUrlPrefix}ws.mia.re/trip-management/third-party-api/v2/trips/${tripId}/`;
+    const res = await this._axiosAgent.get<GetTripResponse>(baseUrl);
 
     return res.data;
   }

@@ -117,3 +117,5 @@ export interface CreateTripResponse extends Trip {
 export interface CancelTripResponse extends Trip {
   state: 'canceled_by_client';
 }
+
+export interface GetTripResponse extends Trip {}
