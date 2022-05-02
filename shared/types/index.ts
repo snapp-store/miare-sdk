@@ -120,3 +120,13 @@ export interface CancelMiareTripResponse extends MiareTrip {
 }
 
 export interface GetMiareTripResponse extends MiareTrip {}
+
+export interface AddMiareCoursesToTripRequestBody {
+  bill_number: string;
+  name: string;
+  address: string;
+  dropped_off_at: string | null;
+  phone_number: string;
+  location: MiareLocationPoint | null;
+  manifest_items: MiareCourseManifestTtem[] | null;
+}

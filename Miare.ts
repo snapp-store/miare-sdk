@@ -1,15 +1,16 @@
 import axios, { AxiosInstance } from 'axios';
 import {
-  GetAreasResponse,
+  AddMiareCoursesToTripRequestBody,
   CancelMiareTripResponse,
   CreateMiareTripRequestBody,
   CreateMiareTripResponse,
+  GetAreasResponse,
   GetEstimatePriceResponse,
   GetMiareTripResponse,
   GetMiareTripsRequestBody,
   GetMiareTripsResponse,
-  MiareLocationPoint,
   MiareEnvironment,
+  MiareLocationPoint,
 } from './shared/types';
 
 class Miare {
@@ -24,6 +25,20 @@ class Miare {
   async createTrip(createTripParameters: CreateMiareTripRequestBody) {
     const baseUrl = `https://${this._apiUrlPrefix}ws.mia.re/trip-management/third-party-api/v2/trips`;
     const res = await this._axiosAgent.post<CreateMiareTripResponse>(baseUrl, createTripParameters);
+
+    return res.data;
+  }
+
+  async addCourseToTrip(tripid: string, newCourse: AddMiareCoursesToTripRequestBody) {
+    const baseUrl = `https://${this._apiUrlPrefix}ws.mia.re/trip-management/third-party-api/v2/trips/${tripid}/courses`;
+    const res = await this._axiosAgent.patch<CreateMiareTripResponse>(baseUrl, newCourse);
+
+    return res.data;
+  }
+
+  async removeCourseFromTrip(courseId: string) {
+    const baseUrl = `https://${this._apiUrlPrefix}ws.mia.re/trip-management/third-party-api/v2/courses/${courseId}`;
+    const res = await this._axiosAgent.delete<CreateMiareTripResponse>(baseUrl);
 
     return res.data;
   }
