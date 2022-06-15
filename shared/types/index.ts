@@ -37,7 +37,7 @@ export interface MiareTripCourses {
   dropped_off_at: string | null;
   phone_number: string;
   location: MiareLocationPoint | null;
-  manifest_items: MiareCourseManifestItem[] | null;
+  manifest_items: MiareCourseManifestItem[];
   payment: {
     payment_type: 'cash';
     price: number;
