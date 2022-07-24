@@ -56,6 +56,7 @@ export interface MiareTrip {
   id: string;
   created_at: string;
   assigned_at: string | null;
+  delivery_cost: null | number;
   picked_up_at: string | null;
   state: MiareTripState;
   pickup: {
